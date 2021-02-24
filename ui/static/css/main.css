@@ -1,0 +1,39 @@
+@import 'header.css';
+@import 'header_title.css';
+@import 'navigation.css';
+@import 'footer.css';
+@import 'messages.css';
+@import 'overwrite_nes.css';
+
+html, body {
+    height: 100%;
+}
+
+body {
+    overflow-y: scroll;
+    padding: 0 2rem;
+    margin: 0 2rem;
+}
+
+main {
+    max-width: 1200px;
+    margin: 0 auto;
+    margin-top: 150px;
+}
+
+.margin-x-right-normal {
+    margin-right: 1rem;
+}
+
+.margin-y-top-normal {
+    margin-top: 1rem;
+}
+
+.flash {
+    color: #FFFFFF;
+    font-weight: bold;
+    background-color: #34495E;
+    padding: 18px;
+    margin-bottom: 36px;
+    text-align: center;
+}

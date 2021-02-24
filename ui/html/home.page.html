@@ -1,0 +1,111 @@
+{{template "base" .}}
+{{define "title"}}Home{{end}}
+{{define "body"}}
+
+<section class="nes-container with-title">
+    <p class="title">Tasks worked on: 50%</p>
+    <section class="message-list">
+        <section class="message -left">
+            <i class="nes-bcrikko"></i>
+            <!-- Balloon -->
+            <div class="nes-balloon from-left">
+                <p>Good evening! Ready for a session?</p>
+            </div>
+        </section>
+        <section class="message -right margin-y-normal">
+            <!-- Balloon -->
+            <div class="nes-balloon from-right">
+                <div class="nes-field">
+                    <label for="name_field">Task description</label>
+                    <input type="text" id="name_field" class="nes-input">
+                </div>
+            </div>
+        </section>
+    </section>
+    <section class="message-left">
+        <!-- Balloon -->
+        <div class="nes-balloon from-left">
+            <p>Time elapsed so far: 30 Minutes</p>
+            <progress class="nes-progress is-success" value="100" max="100"></progress>
+
+        </div>
+    </section>
+    <section class="message-left margin-y-normal">
+        <!-- Balloon -->
+        <div class="nes-balloon from-left">
+            <label for="name_field">Was it productive?</label>
+            <i class="nes-icon is-large like"></i>
+        </div>
+    </section>
+</section>
+
+<section class="nes-container">
+    <section class="message-list">
+        <section class="message -left">
+            <!-- Balloon -->
+            <div class="nes-balloon from-left">
+                <p>Ready for another session?</p>
+            </div>
+        </section>
+        <section class="message -right margin-y-normal">
+            <!-- Balloon -->
+            <div class="nes-balloon from-right">
+                <div class="nes-field">
+                    <label for="name_field">Task description</label>
+                    <input type="text" id="name_field" class="nes-input">
+                </div>
+            </div>
+        </section>
+    </section>
+    <section class="message -left">
+        <!-- Balloon -->
+        <div class="nes-balloon from-left">
+            <p>Time elapsed so far: 15 Minutes and 36 Seconds</p>
+            <div style="display:flex;">
+                <progress class="nes-progress is-warning margin-x-right-normal" value="50" max="100"></progress>
+                <div style="display:flex;">
+                    <a class="nes-btn margin-x-right-normal is-warning" href="#">Pause</a>
+                    <a class="nes-btn is-error" href="#">Reset</a>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>
+
+<section class="nes-container is-centered">
+    <section class="message-list">
+        <section>
+            <i class="nes-bcrikko"></i>
+            <!-- Balloon -->
+            <div class="nes-balloon from-left margin-y-top-normal">
+                <p>Congratulations! So far you have completed half of the tasks.</p>
+                <i class="nes-icon is-large star"></i>
+                <i class="nes-icon is-large star"></i>
+                <i class="nes-icon is-large star is-empty"></i>
+                <i class="nes-icon is-large star is-empty"></i>
+            </div>
+        </section>
+    </section>
+</section>
+
+<section class="nes-container">
+    <section class="message-list">
+        <section class="message -left">
+            <!-- Balloon -->
+            <div class="nes-balloon from-left">
+                <p>Ready for another session?</p>
+            </div>
+        </section>
+        <section class="message -right margin-y-normal">
+            <!-- Balloon -->
+            <div class="nes-balloon from-right">
+                <div class="nes-field">
+                    <label for="name_field">Task description</label>
+                    <input type="text" id="name_field" class="nes-input">
+                </div>
+            </div>
+        </section>
+    </section>
+</section>
+
+{{end}}

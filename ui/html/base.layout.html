@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>{{template "title" .}} - Gorro</title>
+    <title>{{template "title" .}} - Goro</title>
     <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
     <link href="https://unpkg.com/nes.css/css/nes.css" rel="stylesheet" />
     <link rel='stylesheet' href='/static/css/main.css'>
@@ -13,14 +13,11 @@
 
 <body>
     {{template "header" .}}
-    {{with .Flash}}
-    <div class="flash">{{.}}</div>
-    {{end}}
     <main>
         {{template "body" .}}
-        {{template "footer" .}}
+    
     </main>
-    <script src="/static/js/main.js" type="text/javascript"></script>
+    <script src="/static/js/main.js" type="module"></script>
 </body>
 
 </html>

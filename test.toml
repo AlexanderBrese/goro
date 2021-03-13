@@ -1,0 +1,5 @@
+[build]
+relative_source_dir = "cmd/web"
+[log]
+detection = true
+run = true

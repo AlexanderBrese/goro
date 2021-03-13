@@ -1,0 +1,16 @@
+{{define "session"}}
+    {{with .User.LatestSession}}
+        {{with $pomodoros := .Pomodoros}}
+            {{range $step, $element := steps 4}}
+                <section class="nes-container">
+                    {{range $index, $element := (slicePomodoros 4 $step $pomodoros)}}
+                        {{template "pomodoro" $element}}
+                        {{if $index lt len $pomodoros }}
+                            {{template "continue"}}
+                        {{end}}
+                    {{end}}
+                </section>
+            {{end}}
+        {{end}}
+    {{end}}
+{{end}}

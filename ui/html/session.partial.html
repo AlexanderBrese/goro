@@ -1,15 +1,19 @@
 {{define "session"}}
     {{with .User.LatestSession}}
         {{with $pomodoros := .Pomodoros}}
-            {{range $step, $element := steps 4}}
-                <section class="nes-container">
-                    {{range $index, $element := (slicePomodoros 4 $step $pomodoros)}}
-                        {{template "pomodoro" $element}}
-                        {{if $index lt len $pomodoros }}
+            {{with $steps := steps 4 (len $pomodoros)}}
+                {{range $step, $element := stepRange $steps}}
+                    {{with $pomodoroSlice := slicePomodoros $steps $step $pomodoros}}
+                        <section class="nes-container">
+                            {{range $index, $element := $pomodoroSlice}}
+                                {{template "pomodoro" $element}}
+                            {{end}}
+                        </section>
+                        {{if and (eq (len $pomodoroSlice) 4) (lt $step $steps)}}
                             {{template "continue"}}
                         {{end}}
                     {{end}}
-                </section>
+                {{end}}
             {{end}}
         {{end}}
     {{end}}

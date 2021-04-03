@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"html/template"
 	"path/filepath"
+	"strings"
 )
 
 type TemplateCache = map[string]*template.Template
@@ -71,7 +72,11 @@ func cachePartials(partialPath string, funcs *TemplateFunctions) (TemplateCache,
 	}
 	for _, partial := range partials {
 		partialName := templateName(partial)
-		partialTemplate, err := parseTemplate(partial, partialName, funcs)
+		partialTemplate, err := parsePartial(partialName, funcs)
+		if err != nil {
+			return nil, err
+		}
+		partialTemplate, err = dependentPartials(partialTemplate, partialPath)
 		if err != nil {
 			return nil, err
 		}
@@ -93,6 +98,11 @@ func pages(pageDir string) ([]string, error) {
 
 func templateName(template string) string {
 	return filepath.Base(template)
+}
+
+func parsePartial(partialName string, funcs *TemplateFunctions) (*template.Template, error) {
+	name := strings.Split(partialName, ".")[0]
+	return template.New(partialName).Funcs(funcs.get()).Parse(fmt.Sprintf("{{template \"%s\" .}}", name))
 }
 
 func parseTemplate(templatePath string, templateName string, funcs *TemplateFunctions) (*template.Template, error) {

@@ -19,7 +19,7 @@ func DefaultUser() *User {
 }
 
 func (u *User) NewSession() {
-	u.sessions = append(u.sessions, NewSession(u.settings.pause, u.settings.smallPause, int(u.settings.duration)))
+	u.sessions = append(u.sessions, NewSession(u.settings.pause, u.settings.smallPause, int(u.settings.duration), u.settings.dailyGoal))
 }
 
 func (u *User) DailyGoal() uint8 {

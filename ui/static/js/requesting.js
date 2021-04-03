@@ -1,8 +1,27 @@
 export class Requesting {
-    constructor(url, body = "", contentType = "",) {
+    constructor(url, body = "", contentType = "text/html",) {
         this.contentType = contentType
         this.url = url
         this.body = body
+    }
+
+    async post() {
+        return await this.request('POST')
+    }
+
+    async get() {
+        return await this.request('GET')
+    }
+
+    async request(method) {
+        const request = new Request(this.url, {
+            method: method,
+            body: JSON.stringify(this.body),
+            headers: {
+                'Content-Type': this.contentType
+            }
+        })
+        return (await this.send(request)).text()
     }
 
     async send(request) {
@@ -11,28 +30,5 @@ export class Requesting {
         } catch (err) {
             console.error('error: ', err)
         }
-    }
-
-    async post() {
-        let contentType = this.contentType === "" ? "application/json" : this.contentType
-        const request = new Request(this.url, {
-            method: 'POST',
-            body: JSON.stringify(this.body),
-            headers: {
-                'Content-Type': contentType
-            }
-        })
-        return await this.send(request)
-    }
-
-    async get() {
-        let contentType = this.contentType === "" ? "text/html" : this.contentType
-        const request = new Request(this.url, {
-            method: 'GET',
-            headers: {
-                'Content-Type': contentType
-            }
-        })
-        return await this.send(request)
     }
 }

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"html/template"
 	"net/http"
+	"strings"
 )
 
 type Rendering struct {
@@ -62,7 +63,10 @@ func (r *Rendering) render(t *template.Template, td *TemplateData, out http.Resp
 	if err := t.Execute(buf, td); err != nil {
 		return err
 	}
-	if _, err := buf.WriteTo(out); err != nil {
+
+	res := strings.TrimSpace(buf.String())
+
+	if _, err := out.Write([]byte(res)); err != nil {
 		return err
 	}
 	return nil

@@ -20,6 +20,8 @@ func NewSession(pause uint8, smallPause uint8, duration int, dailyGoal uint8) *S
 		duration:   duration,
 	}
 
+	s.NewPomodoro()
+
 	return s
 }
 

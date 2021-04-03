@@ -21,6 +21,7 @@ func NewTemplateFunctions() *TemplateFunctions {
 			"begin":          begin,
 			"end":            end,
 			"slicePomodoros": slicePomodoros,
+			"stepRange":      stepRange,
 		},
 	}
 }
@@ -49,8 +50,15 @@ func greeting() string {
 	return greeting.String()
 }
 
-func steps(num int) []int {
-	return make([]int, num)
+func steps(num int, len int) int {
+	if len == 0 {
+		return 0
+	}
+	return int(math.Ceil(float64(len) / float64(num)))
+}
+
+func stepRange(steps int) []int {
+	return make([]int, steps)
 }
 
 func portion(steps int, len int) int {

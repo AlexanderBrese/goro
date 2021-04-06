@@ -32,7 +32,7 @@ func NewTemplateCaching(cfg *Configuration) (*TemplateCaching, error) {
 func (t *TemplateCaching) Get(name string) (*template.Template, error) {
 	tc, ok := t.templateCache[name]
 	if !ok {
-		return nil, fmt.Errorf("The template %s does not exist", name)
+		return nil, fmt.Errorf("the template %s does not exist", name)
 	}
 	return tc, nil
 }

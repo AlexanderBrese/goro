@@ -1,25 +1,12 @@
 package model
 
 type Settings struct {
-	sound        string
-	dark         bool
-	volume       uint8
-	notification bool
-	duration     uint8
-	smallPause   uint8
-	pause        uint8
-	dailyGoal    uint8
-}
-
-func DefaultSettings() *Settings {
-	return &Settings{
-		sound:        "",
-		dark:         false,
-		volume:       100,
-		notification: true,
-		duration:     25,
-		smallPause:   5,
-		pause:        10,
-		dailyGoal:    4,
-	}
+	Sound        string `json:"sound"`
+	Dark         bool   `json:"dark"`
+	Volume       uint8  `json:"volume"`
+	Notification bool   `json:"notification"`
+	Duration     uint8  `json:"duration"`
+	SmallPause   uint8  `json:"smallPause"`
+	Pause        uint8  `json:"pause"`
+	DailyGoal    uint8  `json:"dailyGoal"`
 }

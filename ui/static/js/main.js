@@ -1,32 +1,28 @@
-import { Sync } from "./sync.js";
-import { Start } from "./start.js";
-import { Task } from "./task.js";
-import { Storage } from "./storage.js";
-import { DefaultEventSystem, Events } from "./event_system.js";
+import { LiveReload } from "./live_reload.js";
+import { UserStorage } from "./user_storage.js";
+import { DefaultEventSystem } from "./event_system.js";
+import { Goro } from "./goro.js";
 
 class Main {
-  constructor(storage = new Storage(), eventSystem = DefaultEventSystem()) {
-    this.storage = storage;
+  constructor(
+    userStorage = new UserStorage(),
+    eventSystem = DefaultEventSystem()
+  ) {
+    this.userStorage = userStorage;
     this.eventSystem = eventSystem;
-    new Start(storage.user, eventSystem).listen();
+  }
 
-    if (storage.user.hasOngoingSession()) {
-      this.listen();
+  async main() {
+    const user = await this.userStorage.load();
+    console.log(user);
+    const goro = new Goro(user, this.userStorage, this.eventSystem);
+
+    if (user.hasOngoingSession()) {
+      goro.init();
     } else {
-      this.onNewSession();
+      goro.start();
     }
   }
-
-  onNewSession() {
-    this.eventSystem.listen(Events.NEW_SESSION, () => {
-      this.storage.newSession()
-      this.listen();
-    });
-  }
-
-  listen() {
-    new Task(this.storage.user.currentPomodoro()).listen();
-  }
 }
-new Main();
-new Sync();
+new Main().main();
+new LiveReload();

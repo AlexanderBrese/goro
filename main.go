@@ -1,16 +1,13 @@
 package main
 
-import "github.com/AlexanderBrese/gorro/pkg/model"
-
 func main() {
 	config := ParsedConfiguration()
-	user := model.DefaultUser()
 	logging := NewLogging()
-	rendering, err := NewRendering(config, logging)
+	rendering, err := NewRendering(config)
 	if err != nil {
 		logging.errorLog.Fatalf("error: could not initialize rendering: %s", err)
 	}
-	handling := NewRouteHandling(rendering, user)
+	handling := NewRouteHandling(rendering, logging)
 	routing := NewRouting(handling, config)
 	serving := NewServing(config, logging, routing)
 

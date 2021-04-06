@@ -13,12 +13,20 @@ export class Session {
     this.duration = duration;
   }
 
-  changeCompletionDate(completionDate) {
+  complete(completionDate) {
     this.completionDate = completionDate;
   }
 
-  newPomodoro(pomodoro) {
-    this.pomodoros.push(pomodoro);
+  completed() {
+    return this.completionDate !== undefined;
+  }
+
+  completedPomodoros() {
+    return this.pomodoros.filter((pom) => pom.completed())
+  }
+
+  newPomodoro() {
+    this.pomodoros.push(new Pomodoro());
   }
 
   changePomodoro(pomodoro, newPomodoro) {
@@ -41,16 +49,14 @@ export class Session {
 
 export class Pomodoro {
   constructor(
-    id,
-    task = "Work",
-    paused = true,
+    task = "",
     breaks = [],
+    paused = true,
     startDate = new Date(),
     feltProductive = false
   ) {
-    this.id = id;
-    this.task = task;
     this.paused = paused;
+    this.task = task;
     this.startDate = startDate;
     this.breaks = breaks;
     this.feltProductive = feltProductive;
@@ -58,12 +64,14 @@ export class Pomodoro {
 
   pause() {
     this.paused = true;
-    this.newBreak()
+    this.newBreak();
   }
 
   resume() {
+    if (this.breaks.length > 0) {
+      this.breaks[this.breaks.length - 1].complete();
+    }
     this.paused = false;
-    this.breaks[this.breaks.length - 1].complete()
   }
 
   completed() {
@@ -74,30 +82,41 @@ export class Pomodoro {
     this.task = task;
   }
 
-  changeCompletionDate(completionDate) {
-    this.completionDate = completionDate;
+  complete() {
+    this.paused = true;
+    this.completionDate = new Date();
   }
 
-  changeFeltProductive(feltProductive) {
-    this.feltProductive = feltProductive;
+  toggleFeedBack() {
+    this.feltProductive = !this.feltProductive
   }
 
   newBreak() {
     this.breaks.push(new Break());
   }
+
+  toJSON() {
+    return {
+      task: this.task,
+      startDate: this.startDate,
+      completionDate: this.completionDate,
+      breaks: this.breaks,
+      feltProductive: this.feltProductive,
+    };
+  }
 }
 
 export class Break {
   construct() {
-    this.startDate = new Date()
-    this.completionDate = this.startDate
+    this.startDate = new Date();
+    this.completionDate = this.startDate;
   }
 
   complete() {
-    this.completionDate = new Date()
+    this.completionDate = new Date();
   }
 
   duration() {
-    this.completionDate - this.startDate
+    this.completionDate - this.startDate;
   }
 }

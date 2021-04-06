@@ -1,10 +1,14 @@
 import { WebElement } from "./web_element.js";
 
 export class Task {
-  constructor(currentPomodoro) {
-    this.pomodoro = currentPomodoro;
-    
-    this.input = new WebElement(".task").parsed();
+  constructor(currentPomodoro, dispatch, element = new WebElement(".task")) {
+    this.currentPomodoro = currentPomodoro;
+    this.input = element.get();
+    this.dispatch = dispatch
+  }
+
+  update() {
+    this.input.value = this.currentPomodoro.task
   }
 
   listen() {
@@ -13,6 +17,7 @@ export class Task {
 
   onInput(e) {
     const task = e.target.value;
-    this.pomodoro.changeTask(task)
+    this.currentPomodoro.changeTask(task)
+    this.dispatch()
   }
 }

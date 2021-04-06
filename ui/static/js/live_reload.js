@@ -1,4 +1,4 @@
-export class Sync {
+export class LiveReload {
     constructor(port = 3000, route = '/sync', tryTimeout = 2000) {
         this.port = port
         this.route = route

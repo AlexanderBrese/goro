@@ -14,7 +14,12 @@ class Event {
 }
 
 export const Events = {
+  START: "start",
+  FINISH_POMODORO: "finishpomodoro",
+  FINISH_BREAK: "finishbreak",
+  GIVE_FEEDBACK: "givefeedback",
   NEW_SESSION: "newsession",
+  UPDATE_TASK: "updatetask"
 };
 
 export function DefaultEventSystem() {

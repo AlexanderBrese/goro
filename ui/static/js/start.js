@@ -1,13 +1,10 @@
-import { Rendering } from "./rendering.js";
 import { WebElement } from "./web_element.js";
-import { Requesting } from "./requesting.js";
-import { Events } from "./event_system.js";
 
 export class Start {
-  constructor(user, eventSystem) {
+  constructor(user, dispatch) {
     this.user = user;
-    this.eventSystem = eventSystem;
-    this.btn = new WebElement("#sure").parsed();
+    this.dispatch = dispatch;
+    this.btn = new WebElement("#sure").get();
   }
 
   listen() {
@@ -20,11 +17,7 @@ export class Start {
 
   async onClick() {
     this.disable();
-
-    const content = await new Requesting("/newSession").post();
-    new Rendering(new WebElement("main"), content).start();
-
-    this.eventSystem.dispatch(Events.NEW_SESSION);
+    this.dispatch();
   }
 
   disable() {

@@ -3,14 +3,27 @@ export const RenderingTypes = {
 }
 
 export class Rendering {
-    constructor(webElement, content, method = RenderingTypes.APPEND) {
-        this.element = webElement.parsed()
-        this.content = content
+    constructor(parent, child, method = RenderingTypes.APPEND) {
+        this.parent = parent
+        this.child = child
         this.method = method
     }
 
-    start() {
-        this.element.insertAdjacentHTML(this.method, this.content)
+    html() {
+        this.parent.insertAdjacentHTML(this.method, this.child)
+    }
+
+    dom() {
+        const child = this.child.cloned()
+        this.parent.get().appendChild(child)
+        this.show(child)
     }
     
+    show(node) {
+        node.classList.remove("hidden")
+    }
+}
+
+export function DefaultRendering() {
+    return new Rendering(null, null)
 }

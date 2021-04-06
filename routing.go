@@ -9,16 +9,20 @@ import (
 
 type Routes struct {
 	home       string
-	alive      string
-	files      string
-	newSession string
+	statistics string
+	settings   string
+
+	alive string
+	files string
 }
 
 var routes = &Routes{
 	home:       "/",
-	alive:      "/ping",
-	files:      "/static/",
-	newSession: "/newSession",
+	statistics: "/statistics",
+	settings:   "/settings",
+
+	alive: "/ping",
+	files: "/static/",
 }
 
 type Routing struct {
@@ -37,10 +41,11 @@ func (r *Routing) routes() http.Handler {
 	router := pat.New()
 
 	router.Get(routes.home, http.HandlerFunc(r.handling.home))
+	router.Get(routes.settings, http.HandlerFunc(r.handling.settings))
+	router.Post(routes.statistics, http.HandlerFunc(r.handling.statistics))
+
 	router.Get(routes.alive, http.HandlerFunc(r.handling.ping))
 	router.Get(routes.files, fileServer(http.StripPrefix(routes.files, http.FileServer(http.Dir(r.config.StaticPath)))))
-
-	router.Post(routes.newSession, http.HandlerFunc(r.handling.newSession))
 
 	return http.HandlerFunc(router.ServeHTTP)
 }

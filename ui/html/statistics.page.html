@@ -1,0 +1,5 @@
+{{template "base" .}}
+{{define "title"}}Statistics{{end}}
+{{define "body"}}
+<h2>{{(index .Payload "user").Name}}</h2>
+{{end}}

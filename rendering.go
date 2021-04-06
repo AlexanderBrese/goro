@@ -3,71 +3,50 @@ package main
 import (
 	"bytes"
 	"html/template"
-	"net/http"
 	"strings"
 )
 
 type Rendering struct {
-	cache  *TemplateCaching
-	logger *Logging
+	cache *TemplateCaching
 }
 
-type RenderingConfiguration struct {
-	request        *http.Request
-	responseWriter http.ResponseWriter
-	templateName   string
-	templateData   *TemplateData
-}
-
-func NewRendering(config *Configuration, logger *Logging) (*Rendering, error) {
+func NewRendering(config *Configuration) (*Rendering, error) {
 	tc, err := NewTemplateCaching(config)
 	if err != nil {
 		return nil, err
 	}
 
 	return &Rendering{
-		cache:  tc,
-		logger: logger,
+		cache: tc,
 	}, nil
 }
 
-func (r *Rendering) start(renderConfig *RenderingConfiguration) {
-	t, err := r.getTemplate(renderConfig)
+func (r *Rendering) start(templateData *TemplateData) ([]byte, error) {
+	t, err := r.getTemplate(templateData)
 	if err != nil {
-		r.logger.tracedServerError(renderConfig.responseWriter, err)
-		return
+		return nil, err
 	}
 
-	renderConfig.responseWriter.Header().Set("Content-Type", "text/html")
+	res, err := r.render(t, templateData)
 
-	if err := r.render(t, r.getTemplateData(renderConfig), renderConfig.responseWriter); err != nil {
-		r.logger.tracedServerError(renderConfig.responseWriter, err)
+	if err != nil {
+		return nil, err
 	}
+
+	return res, nil
 }
 
-func (r *Rendering) getTemplate(renderConfig *RenderingConfiguration) (*template.Template, error) {
-	return r.cache.Get(renderConfig.templateName)
+func (r *Rendering) getTemplate(templateData *TemplateData) (*template.Template, error) {
+	return r.cache.Get(templateData.Name)
 }
 
-func (r *Rendering) getTemplateData(renderConfig *RenderingConfiguration) *TemplateData {
-	td := renderConfig.templateData
-	if td == nil {
-		td = DefaultTemplateData()
-	}
-	return td
-}
-
-func (r *Rendering) render(t *template.Template, td *TemplateData, out http.ResponseWriter) error {
+func (r *Rendering) render(t *template.Template, td *TemplateData) ([]byte, error) {
 	buf := new(bytes.Buffer)
 
 	if err := t.Execute(buf, td); err != nil {
-		return err
+		return nil, err
 	}
+	res := []byte(strings.TrimSpace(buf.String()))
 
-	res := strings.TrimSpace(buf.String())
-
-	if _, err := out.Write([]byte(res)); err != nil {
-		return err
-	}
-	return nil
+	return res, nil
 }

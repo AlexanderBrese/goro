@@ -1,31 +1,39 @@
 package main
 
 import (
-	"net/http"
 	"time"
 
-	"github.com/AlexanderBrese/gorro/pkg/forms"
 	"github.com/AlexanderBrese/gorro/pkg/model"
 )
 
 type TemplateData struct {
-	CurrentHour uint8
-	CurrentYear int
-	Form        *forms.Form
-	Request     *http.Request
-	User        *model.User
+	Name    string
+	Payload map[string]interface{}
 }
 
-func NewTemplateData(form *forms.Form, r *http.Request, u *model.User) *TemplateData {
+func NewTemplateData(name string, payload map[string]interface{}) *TemplateData {
 	today := time.Now()
+	payload["currentHour"] = uint8(today.Hour())
+	payload["currentYear"] = today.Year()
 	return &TemplateData{
-		CurrentHour: uint8(today.Hour()),
-		CurrentYear: today.Year(),
-		Form:        form,
-		User:        u,
+		Name:    name,
+		Payload: payload,
 	}
 }
 
+func PageTemplateData(name string) *TemplateData {
+	return NewTemplateData(name, map[string]interface{}{})
+}
+
+func UserTemplateData(name string, user *model.User) *TemplateData {
+	return NewTemplateData(name, map[string]interface{}{
+		"user": user,
+	})
+}
+
 func DefaultTemplateData() *TemplateData {
-	return NewTemplateData(nil, nil, model.DefaultUser())
+	payload := map[string]interface{}{
+		"user": model.DefaultUser(),
+	}
+	return NewTemplateData("", payload)
 }

@@ -25,7 +25,3 @@ type Stats struct {
 	skipHigh       int
 	level          int
 }
-
-func DefaultStats() *Stats {
-	return &Stats{}
-}

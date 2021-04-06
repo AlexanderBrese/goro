@@ -12,5 +12,5 @@ export class Settings {
 }
 
 export function DefaultSettings() {
-    return new Settings("", false, 100, true, 25, 5, 10, 4)
+    return new Settings("default.mp3", false, 100, true, 3, 5, 10, 4)
 }

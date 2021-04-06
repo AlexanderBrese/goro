@@ -16,7 +16,7 @@ export class Requesting {
     async request(method) {
         const request = new Request(this.url, {
             method: method,
-            body: JSON.stringify(this.body),
+            body: this.body,
             headers: {
                 'Content-Type': this.contentType
             }

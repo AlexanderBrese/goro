@@ -1,5 +1,5 @@
-import { WebElement } from "./web_element.js";
-import { Counting } from "./counting.js";
+import { WebElement } from "./utils/web_element.js";
+import { Counting } from "./utils/counting.js";
 
 export class BreakProgress {
   constructor(

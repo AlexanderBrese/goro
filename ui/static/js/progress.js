@@ -1,5 +1,5 @@
-import { Counting } from "./counting.js";
-import { WebElement } from "./web_element.js";
+import { Counting } from "./utils/counting.js";
+import { WebElement } from "./utils/web_element.js";
 
 export class Progress {
   constructor(

@@ -14,9 +14,8 @@ export class Rendering {
     }
 
     dom() {
-        const child = this.child.cloned()
-        this.parent.get().appendChild(child)
-        this.show(child)
+        this.parent.appendChild(this.child)
+        this.show(this.child)
     }
     
     show(node) {

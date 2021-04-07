@@ -1,5 +1,5 @@
-import { Requesting } from "./requesting.js";
-import { WebElement } from "./web_element.js";
+import { Requesting } from "./utils/requesting.js";
+import { WebElement } from "./utils/web_element.js";
 
 const routes = {
     Statistics: '/statistics',

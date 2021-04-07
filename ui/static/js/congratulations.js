@@ -1,9 +1,9 @@
-import { WebElement, MainElement, NewCongratulations } from "./web_element.js";
-import { Rendering } from "./rendering.js";
+import { WebElement, MainElement, NewCongratulations } from "./utils/web_element.js";
+import { Rendering } from "./utils/rendering.js";
 
 export class Congratulations {
   constructor(sessionProgress) {
-    new Rendering(MainElement, NewCongratulations).dom();
+    new Rendering(MainElement, NewCongratulations.get()).dom();
     if (sessionProgress == 100) {
       this.showStar(".congratulations--star-4");
     }

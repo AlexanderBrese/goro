@@ -34,7 +34,7 @@ export class WebElement {
       case Options.RESOLVE_LATEST:
         return this.lastElement(els);
       case Options.RESOLVE_OLDEST:
-        return this.firstElement(els);
+        return this.firstElement(els).cloneNode(true);
       case Options.RESOLVE_DEFINED:
         return els.item(this.pos);
     }
@@ -63,7 +63,7 @@ export const Options = {
   RESOLVE_OLDEST: "resolveoldest",
   RESOLVE_DEFINED: "resolvedefined",
 };
-export const MainElement = new WebElement("main", Options.RESOLVE_OLDEST);
+export const MainElement = new WebElement("main").get();
 export const NewSessionPart = new WebElement(
   ".session--part",
   Options.RESOLVE_OLDEST
@@ -72,5 +72,9 @@ export const NewPomodoroElement = new WebElement(
   ".pomodoro",
   Options.RESOLVE_OLDEST
 );
-export const DailyGoalElement = new WebElement("#dailyGoal");
-export const NewCongratulations = new WebElement(".congratulations", Options.RESOLVE_OLDEST)
+export const DailyGoalElement = new WebElement("#dailyGoal").get();
+export const AutoCompletionElement = new WebElement("#autocompletion").get();
+export const NewCongratulations = new WebElement(
+  ".congratulations",
+  Options.RESOLVE_OLDEST
+);

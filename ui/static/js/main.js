@@ -1,21 +1,24 @@
-import { LiveReload } from "./live_reload.js";
+import { LiveReload } from "./utils/live_reload.js";
 import { UserStorage } from "./user_storage.js";
-import { DefaultEventSystem } from "./event_system.js";
+
 import { Goro } from "./goro.js";
+import { AutoCompletion } from "./utils/autocompletion.js";
 
 class Main {
-  constructor(
-    userStorage = new UserStorage(),
-    eventSystem = DefaultEventSystem()
-  ) {
+  constructor(userStorage = new UserStorage()) {
     this.userStorage = userStorage;
-    this.eventSystem = eventSystem;
   }
 
   async main() {
     const user = await this.userStorage.load();
     console.log(user);
-    const goro = new Goro(user, this.userStorage, this.eventSystem);
+    const tasks = await this.userStorage.loadTasks();
+    const goro = new Goro(
+      user,
+      this.userStorage,
+      this.eventSystem,
+      new AutoCompletion(tasks)
+    );
 
     if (user.hasOngoingSession()) {
       goro.init();

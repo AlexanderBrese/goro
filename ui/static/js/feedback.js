@@ -1,4 +1,4 @@
-import { WebElement } from "./web_element.js";
+import { WebElement } from "./utils/web_element.js";
 
 export class Feedback {
   constructor(

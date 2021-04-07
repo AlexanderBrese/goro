@@ -1,8 +1,8 @@
 import { Start } from "./start.js";
 import { Task } from "./task.js";
-import { Events } from "./event_system.js";
+import { Events, DefaultEventSystem } from "./utils/event_system.js";
 import { Navigation } from "./navigation.js";
-import { DefaultRendering, Rendering } from "./rendering.js";
+import { DefaultRendering, Rendering } from "./utils/rendering.js";
 import {
   MainElement,
   NewSessionPart,
@@ -10,13 +10,13 @@ import {
   DailyGoalElement,
   WebElement,
   Options,
-} from "./web_element.js";
+} from "./utils/web_element.js";
 import { Progress } from "./progress.js";
 import { BreakProgress } from "./break_progress.js";
 import { Feedback } from "./feedback.js";
 import { wait } from "./utils/wait.js";
 import { Congratulations } from "./congratulations.js";
-import { Scrolling } from "./scrolling.js";
+import { Scrolling } from "./utils/scrolling.js";
 
 const SessionProgress = {
   FIRST_STEP: false,
@@ -26,10 +26,16 @@ const SessionProgress = {
 };
 
 export class Goro {
-  constructor(user, userStorage, eventSystem) {
+  constructor(
+    user,
+    userStorage,
+    eventSystem = DefaultEventSystem(),
+    autocompletion
+  ) {
     this.userStorage = userStorage;
     this.user = user;
     this.eventSystem = eventSystem;
+    this.autocompletion = autocompletion;
 
     new Start(this.user, () =>
       this.eventSystem.dispatch(Events.START)
@@ -40,12 +46,11 @@ export class Goro {
   init() {
     this.refreshDailyGoal();
     this.renderSessionParts();
-    new Scrolling(".pomodoro").do()
+    new Scrolling(".pomodoro").do();
     this.listen();
   }
 
   refreshDailyGoal() {
-    const dailyGoalElement = DailyGoalElement.get();
     let completedPomodoros = 0;
     const currentSession = this.user.currentSession();
     if (currentSession !== undefined) {
@@ -53,52 +58,56 @@ export class Goro {
     }
     const dailyGoal = this.user.settings.dailyGoal;
 
-    if (dailyGoalElement.textContent.match(/.*\d/)) {
-      dailyGoalElement.textContent = `${
-        dailyGoalElement.textContent.split(":")[0]
+    if (DailyGoalElement.textContent.match(/.*\d/)) {
+      DailyGoalElement.textContent = `${
+        DailyGoalElement.textContent.split(":")[0]
       }: `;
     }
-    dailyGoalElement.textContent += `${completedPomodoros}/${dailyGoal}`;
+    DailyGoalElement.textContent += `${completedPomodoros}/${dailyGoal}`;
   }
 
-  renderSessionParts() {
-    new Rendering(MainElement, NewSessionPart).dom();
+  async renderSessionParts() {
+    new Rendering(MainElement, NewSessionPart.get()).dom();
+
     const currentPomodoros = this.user.currentSession().pomodoros;
     if (currentPomodoros.every((pom) => pom.completed())) {
       this.userStorage.newPomodoro();
     }
+
     for (let i = 1; i - 1 < currentPomodoros.length; i++) {
+      const pomodoro = currentPomodoros[i - 1];
+
       if (i > 1) {
         const currentProgress = ((i - 1) / this.user.settings.dailyGoal) * 100;
         if (currentProgress >= 25 && !SessionProgress.FIRST_STEP) {
           SessionProgress.FIRST_STEP = true;
           new Congratulations(currentProgress);
-          new Rendering(MainElement, NewSessionPart).dom();
+          new Rendering(MainElement, NewSessionPart.get()).dom();
         } else if (currentProgress >= 50 && !SessionProgress.SECOND_STEP) {
           SessionProgress.SECOND_STEP = true;
           new Congratulations(currentProgress);
-          new Rendering(MainElement, NewSessionPart).dom();
+          new Rendering(MainElement, NewSessionPart.get()).dom();
         } else if (currentProgress >= 75 && !SessionProgress.THIRD_STEP) {
           SessionProgress.THIRD_STEP = true;
           new Congratulations(currentProgress);
-          new Rendering(MainElement, NewSessionPart).dom();
+          new Rendering(MainElement, NewSessionPart.get()).dom();
         } else if (currentProgress == 100 && !SessionProgress.FOURTH_STEP) {
           SessionProgress.FOURTH_STEP = true;
           new Congratulations(currentProgress);
-          new Rendering(MainElement, NewSessionPart).dom();
+          new Rendering(MainElement, NewSessionPart.get()).dom();
         } else {
           new Rendering(
-            new WebElement(".session--part"),
-            NewPomodoroElement
+            new WebElement(".session--part").get(),
+            NewPomodoroElement.get()
           ).dom();
         }
       }
-      const pomodoro = currentPomodoros[i - 1];
 
       const task = new Task(
         pomodoro,
         () => this.eventSystem.dispatch(Events.UPDATE_TASK),
-        new WebElement(".task", Options.RESOLVE_DEFINED, i)
+        this.autocompletion,
+        new WebElement(".task", Options.RESOLVE_DEFINED, i).get()
       );
       task.update();
       task.listen();
@@ -173,24 +182,28 @@ export class Goro {
   }
 
   newSessionPart() {
-    new Rendering(MainElement, NewSessionPart).dom();
-    console.log("new session part")
-    new Scrolling(".session--part").do()
+    new Rendering(MainElement, NewSessionPart.get()).dom();
+    new Scrolling(".session--part").do();
     this.userStorage.newPomodoro();
     this.onNewPomodoro();
   }
 
   newPomodoro() {
-    new Rendering(new WebElement(".session--part"), NewPomodoroElement).dom();
-    new Scrolling(".pomodoro").do()
+    new Rendering(
+      new WebElement(".session--part").get(),
+      NewPomodoroElement.get()
+    ).dom();
+    new Scrolling(".pomodoro").do();
     this.userStorage.newPomodoro();
     this.onNewPomodoro();
   }
 
   onNewPomodoro() {
     const currentPomodoro = this.user.currentPomodoro();
-    new Task(currentPomodoro, () =>
-      this.eventSystem.dispatch(Events.UPDATE_TASK)
+    new Task(
+      currentPomodoro,
+      () => this.eventSystem.dispatch(Events.UPDATE_TASK),
+      this.autocompletion
     ).listen();
     new Progress(currentPomodoro, this.user.settings.duration, () =>
       this.eventSystem.dispatch(Events.FINISH_POMODORO)
@@ -206,42 +219,48 @@ export class Goro {
       this.refreshDailyGoal();
 
       DefaultRendering().show(new WebElement(".break").get());
-      new Scrolling(".break").do()
+      new Scrolling(".break").do();
       const breakDuration = this.user.isSmallPause()
         ? this.user.settings.smallPause
         : this.user.settings.pause;
-      new BreakProgress(breakDuration, /*() =>
+      new BreakProgress(
+        breakDuration /*() =>
         this.eventSystem.dispatch(Events.FINISH_BREAK)
-      */).start();
-      this.eventSystem.dispatch(Events.FINISH_BREAK)
+      */
+      ).start();
+      this.eventSystem.dispatch(Events.FINISH_BREAK);
     });
   }
 
   async onFinishBreak() {
     this.eventSystem.listen(Events.FINISH_BREAK, async () => {
       DefaultRendering().show(new WebElement(".productive").get());
-      new Scrolling(".productive").do()
+      new Scrolling(".productive").do();
       await wait();
       DefaultRendering().show(new WebElement(".continue").get());
-      new Scrolling(".continue").do()
+      new Scrolling(".continue").do();
       await wait();
 
       const currentProgress = this.user.currentProgress();
 
       if (currentProgress >= 25 && !SessionProgress.FIRST_STEP) {
         SessionProgress.FIRST_STEP = true;
+
         new Congratulations(currentProgress);
         this.newSessionPart();
       } else if (currentProgress >= 50 && !SessionProgress.SECOND_STEP) {
         SessionProgress.SECOND_STEP = true;
+
         new Congratulations(currentProgress);
         this.newSessionPart();
       } else if (currentProgress >= 75 && !SessionProgress.THIRD_STEP) {
         SessionProgress.THIRD_STEP = true;
+
         new Congratulations(currentProgress);
         this.newSessionPart();
       } else if (currentProgress == 100 && !SessionProgress.FOURTH_STEP) {
         SessionProgress.FOURTH_STEP = true;
+
         new Congratulations(currentProgress);
         this.newSessionPart();
       } else {

@@ -19,6 +19,26 @@ export class UserStorage {
     localforage.setItem(StorageKey, this.serialize(this.user));
   }
 
+  async loadTasks() {
+    const tasks = new Map();
+    await localforage.iterate((v) => {
+      JSON.parse(v).sessions.forEach((session) =>
+        session.pomodoros.forEach((pom) => {
+          if (pom.task !== "") {
+            const taskCount = tasks.get(pom.task);
+            if (taskCount !== undefined) {
+              tasks.set(pom.task, taskCount + 1);
+            } else {
+              tasks.set(pom.task, 1);
+            }
+          }
+        })
+      );
+    });
+    // sort by value
+    return new Map([...tasks.entries()].sort((a,b) => b[1] - a[1]));
+  }
+
   async load() {
     let u = await localforage.getItem(StorageKey);
     if (!u || u === "undefined") {

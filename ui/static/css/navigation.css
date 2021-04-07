@@ -1,0 +1,9 @@
+nav {
+    display: flex;
+    align-items: center;  
+}
+
+h2 {
+    margin-right: 0.9rem;
+    font-size: 1rem;
+}

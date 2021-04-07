@@ -1,2 +1,2 @@
-# gorro
-Gamified pomodoro timer
+# goro
+Private gamified pomodoro timer

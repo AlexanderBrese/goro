@@ -1,4 +1,4 @@
-import { WebElement } from "./utils/web_element.js";
+import { WebElement } from "../util/web_element.js";
 
 export class Task {
   constructor(

@@ -1,4 +1,4 @@
-module github.com/AlexanderBrese/gorro
+module github.com/AlexanderBrese/goro
 
 go 1.16
 

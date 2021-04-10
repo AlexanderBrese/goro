@@ -1,4 +1,5 @@
-import { WebElement } from "./utils/web_element.js";
+import { ButtonClickedSound } from "../util/sound.js";
+import { WebElement } from "../util/web_element.js";
 
 export class Start {
   constructor(user, dispatch) {
@@ -16,6 +17,7 @@ export class Start {
   }
 
   async onClick() {
+    ButtonClickedSound.play()
     this.disable();
     this.dispatch();
   }

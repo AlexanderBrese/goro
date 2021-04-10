@@ -1,5 +1,5 @@
-import { WebElement, MainElement, NewCongratulations } from "./utils/web_element.js";
-import { Rendering } from "./utils/rendering.js";
+import { WebElement, MainElement, NewCongratulations } from "../util/web_element.js";
+import { Rendering } from "../util/rendering.js";
 
 export class Congratulations {
   constructor(sessionProgress) {

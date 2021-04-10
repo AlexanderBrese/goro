@@ -1,11 +1,13 @@
-import { Counting } from "./utils/counting.js";
-import { WebElement } from "./utils/web_element.js";
+import { Counting } from "../util/counting.js";
+import { ButtonClickedSound } from "../util/sound.js";
+import { WebElement } from "../util/web_element.js";
 
 export class Progress {
   constructor(
     currentPomodoro,
     duration,
     dispatch,
+    pomodoroFinishedSound,
     timeText = new WebElement(".progress--time"),
     progressBar = new WebElement(".progress--bar"),
     resumeBtn = new WebElement(".progress--resume"),
@@ -13,6 +15,7 @@ export class Progress {
   ) {
     this.duration = duration;
     this.currentPomodoro = currentPomodoro;
+    this.pomodoroFinishedSound = pomodoroFinishedSound;
     this.dispatch = dispatch;
     this.counting = new Counting(
       duration,
@@ -37,6 +40,7 @@ export class Progress {
   }
 
   onResume() {
+    ButtonClickedSound.play();
     if (this.currentPomodoro.paused) {
       this.currentPomodoro.resume();
       this.counting.resume();
@@ -102,12 +106,14 @@ export class Progress {
   }
 
   onFinish() {
+    ButtonClickedSound.play();
     this.counting.finish();
     this.updateProgressBar(this.duration);
   }
 
   onFinishCounting() {
     this.currentPomodoro.complete();
+    this.pomodoroFinishedSound.play();
     this.removeButtons();
     this.dispatch();
   }

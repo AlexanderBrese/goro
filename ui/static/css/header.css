@@ -9,6 +9,12 @@ header {
     font-size: 0.6rem;
 }
 
+header.is-dark {
+    color: white;
+    background-color: #212529;
+    border-bottom: 4px solid white;
+}
+
 .header-container {
     display: flex;
     align-items: center;

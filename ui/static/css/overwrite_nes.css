@@ -5,3 +5,7 @@ a:hover {
 .nes-container {
     margin-bottom: 2rem;
 }
+
+.nes-container.is-dark {
+    margin-bottom: 2rem;
+}

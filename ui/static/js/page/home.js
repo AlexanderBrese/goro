@@ -1,8 +1,8 @@
-import { Start } from "./start.js";
-import { Task } from "./task.js";
-import { Events, DefaultEventSystem } from "./utils/event_system.js";
-import { Navigation } from "./navigation.js";
-import { DefaultRendering, Rendering } from "./utils/rendering.js";
+import { Start } from "../component/start.js";
+import { Task } from "../component/task.js";
+import { Events, DefaultEventSystem } from "../util/event_system.js";
+import { Navigation } from "../component/navigation.js";
+import { DefaultRendering, Rendering } from "../util/rendering.js";
 import {
   MainElement,
   NewSessionPart,
@@ -10,13 +10,15 @@ import {
   DailyGoalElement,
   WebElement,
   Options,
-} from "./utils/web_element.js";
-import { Progress } from "./progress.js";
-import { BreakProgress } from "./break_progress.js";
-import { Feedback } from "./feedback.js";
-import { wait } from "./utils/wait.js";
-import { Congratulations } from "./congratulations.js";
-import { Scrolling } from "./utils/scrolling.js";
+} from "../util/web_element.js";
+import { Progress } from "../component/progress.js";
+import { BreakProgress } from "../component/break_progress.js";
+import { Feedback } from "../component/feedback.js";
+import { wait } from "../util/wait.js";
+import { Congratulations } from "../component/congratulations.js";
+import { Scrolling } from "../util/scrolling.js";
+import { AutoCompletion } from "../util/autocompletion.js";
+import { Sound } from "../util/sound.js";
 
 const SessionProgress = {
   FIRST_STEP: false,
@@ -25,17 +27,12 @@ const SessionProgress = {
   FOURTH_STEP: false,
 };
 
-export class Goro {
-  constructor(
-    user,
-    userStorage,
-    eventSystem = DefaultEventSystem(),
-    autocompletion
-  ) {
+export class Home {
+  constructor(userStorage) {
     this.userStorage = userStorage;
-    this.user = user;
-    this.eventSystem = eventSystem;
-    this.autocompletion = autocompletion;
+    this.user = this.userStorage.user;
+    this.eventSystem = DefaultEventSystem();
+    this.autocompletion = new AutoCompletion(this.userStorage.tasks);
 
     new Start(this.user, () =>
       this.eventSystem.dispatch(Events.START)
@@ -115,6 +112,7 @@ export class Goro {
         pomodoro,
         this.user.settings.duration,
         () => this.eventSystem.dispatch(Events.FINISH_POMODORO),
+        new Sound(this.user.settings.sound),
         new WebElement(".progress--time", Options.RESOLVE_DEFINED, i),
         new WebElement(".progress--bar", Options.RESOLVE_DEFINED, i),
         new WebElement(".progress--resume", Options.RESOLVE_DEFINED, i),
@@ -136,9 +134,11 @@ export class Goro {
         DefaultRendering().show(
           new WebElement(".continue", Options.RESOLVE_DEFINED, i).get()
         );
-        const breakDuration = this.user.isSmallPause()
-          ? this.user.settings.smallPause
-          : this.user.settings.pause;
+        const breakDuration =
+          i % 2 !== 0
+            ? this.user.settings.smallPause
+            : this.user.settings.pause;
+
         new BreakProgress(
           breakDuration,
           null,
@@ -206,7 +206,8 @@ export class Goro {
       this.autocompletion
     ).listen();
     new Progress(currentPomodoro, this.user.settings.duration, () =>
-      this.eventSystem.dispatch(Events.FINISH_POMODORO)
+      this.eventSystem.dispatch(Events.FINISH_POMODORO),
+      new Sound(this.user.settings.sound)
     ).listen();
     new Feedback(currentPomodoro, () =>
       this.eventSystem.dispatch(Events.GIVE_FEEDBACK)

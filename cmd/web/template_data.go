@@ -3,7 +3,7 @@ package main
 import (
 	"time"
 
-	"github.com/AlexanderBrese/gorro/pkg/model"
+	"github.com/AlexanderBrese/goro/pkg/model"
 )
 
 type TemplateData struct {

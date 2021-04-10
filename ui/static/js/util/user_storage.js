@@ -1,6 +1,6 @@
-import { User, DefaultUser } from "./model/user.js";
-import { Settings } from "./model/settings.js";
-import { Break, Pomodoro, Session } from "./model/pomodoro.js";
+import { User, DefaultUser } from "../model/user.js";
+import { Settings } from "../model/settings.js";
+import { Break, Pomodoro, Session } from "../model/pomodoro.js";
 
 const StorageKey = new Date().toLocaleDateString();
 
@@ -15,31 +15,41 @@ export class UserStorage {
     this.store();
   }
 
+  toggleSetting(setting) {
+    this.user.settings.toggleSetting(setting);
+    this.store();
+  }
+
+  changeSetting(setting, value) {
+    this.user.settings.changeSetting(setting, value);
+    this.store();
+  }
+
   store() {
     localforage.setItem(StorageKey, this.serialize(this.user));
   }
 
   async loadTasks() {
-    const tasks = new Map();
+    this.tasks = new Map();
     await localforage.iterate((v) => {
       JSON.parse(v).sessions.forEach((session) =>
         session.pomodoros.forEach((pom) => {
           if (pom.task !== "") {
-            const taskCount = tasks.get(pom.task);
+            const taskCount = this.tasks.get(pom.task);
             if (taskCount !== undefined) {
-              tasks.set(pom.task, taskCount + 1);
+              this.tasks.set(pom.task, taskCount + 1);
             } else {
-              tasks.set(pom.task, 1);
+              this.tasks.set(pom.task, 1);
             }
           }
         })
       );
     });
     // sort by value
-    return new Map([...tasks.entries()].sort((a,b) => b[1] - a[1]));
+    this.tasks = new Map([...this.tasks.entries()].sort((a,b) => b[1] - a[1]));
   }
 
-  async load() {
+  async loadUser() {
     let u = await localforage.getItem(StorageKey);
     if (!u || u === "undefined") {
       this.user = DefaultUser();
@@ -47,9 +57,13 @@ export class UserStorage {
     }
 
     u = this.deserialize(u);
-
+    console.log(u)
     this.user = new User(u.name, u.settings, u.sessions);
-    return this.user;
+  }
+
+  async load() {
+      await this.loadUser()
+      await this.loadTasks()
   }
 
   deserialize(user) {

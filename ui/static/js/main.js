@@ -1,31 +1,22 @@
-import { LiveReload } from "./utils/live_reload.js";
-import { UserStorage } from "./user_storage.js";
-
-import { Goro } from "./goro.js";
-import { AutoCompletion } from "./utils/autocompletion.js";
+import { LiveReload } from "./util/live_reload.js";
+import { RouteHandlers } from "./routeHandlers.js";
+import { Routes } from "./routes.js";
+import { Routing } from "./util/routing.js";
+import { UserStorage } from "./util/user_storage.js";
+import { Theme } from "./component/theme.js";
+import { Daemon } from "./daemon.js";
 
 class Main {
   constructor(userStorage = new UserStorage()) {
     this.userStorage = userStorage;
   }
 
-  async main() {
-    const user = await this.userStorage.load();
-    console.log(user);
-    const tasks = await this.userStorage.loadTasks();
-    const goro = new Goro(
-      user,
-      this.userStorage,
-      this.eventSystem,
-      new AutoCompletion(tasks)
-    );
-
-    if (user.hasOngoingSession()) {
-      goro.init();
-    } else {
-      goro.start();
-    }
+  async run() {
+    await this.userStorage.load();
+    new Theme(this.userStorage.user.settings.dark).apply();
+    new Routing(Routes, RouteHandlers, this.userStorage).start();
   }
 }
-new Main().main();
+new Main().run();
 new LiveReload();
+//new Daemon().start();

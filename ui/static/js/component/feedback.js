@@ -1,4 +1,5 @@
-import { WebElement } from "./utils/web_element.js";
+import { ButtonClickedSound } from "../util/sound.js";
+import { WebElement } from "../util/web_element.js";
 
 export class Feedback {
   constructor(
@@ -22,6 +23,7 @@ export class Feedback {
   }
 
   onClick() {
+    ButtonClickedSound.play()
     this.currentPomodoro.toggleFeedBack();
     if (this.productiveBtn.classList.contains("is-empty")) {
       this.productiveBtn.classList.remove("is-empty");

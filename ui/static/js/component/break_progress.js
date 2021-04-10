@@ -1,5 +1,6 @@
-import { WebElement } from "./utils/web_element.js";
-import { Counting } from "./utils/counting.js";
+import { WebElement } from "../util/web_element.js";
+import { Counting } from "../util/counting.js";
+import { BreakFinishedSound } from "../util/sound.js";
 
 export class BreakProgress {
   constructor(
@@ -39,6 +40,7 @@ export class BreakProgress {
   }
 
   onFinish() {
+    BreakFinishedSound.play()
     this.dispatch();
   }
 

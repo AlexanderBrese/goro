@@ -1,6 +1,73 @@
-{{template "base" .}}
-{{define "title"}}Settings{{end}}
-{{define "body"}}
+{{template "base" .}} {{define "title"}}Settings{{end}} {{define "body"}}
 
+<div class="nes-container with-title">
+  <p class="title">Settings</p>
+  <div class="options">
+    <label for="sound">Notification Sound</label>
+    <div>
+      <label>
+        <input type="checkbox" id="dark" class="nes-checkbox" />
+        <span>Dark mode</span>
+      </label>
+      <label>
+        <input type="checkbox" id="notification" class="nes-checkbox" disabled />
+        <span>Notifications</span>
+      </label>
+      <label>
+        <input type="checkbox" id="muted" class="nes-checkbox" />
+        <span>Sound</span>
+      </label>
+    </div>
+  </div>
+
+  <div class="nes-select">
+    <select required id="sound">
+      <option value="" disabled selected hidden>Select...</option>
+      <option value="pristine-609.ogg">Default</option>
+      <option value="here-i-am-449.ogg">Vibrations</option>
+    </select>
+  </div>
+
+  <div class="nes-field margin-y-top-normal">
+    <label for="dailyGoal">Daily Goal</label>
+    <input title="1" type="number" id="dailyGoal" min="1" class="nes-input" />
+  </div>
+
+  <div class="nes-field margin-y-top-normal">
+    <label for="duration">Pomodoro Duration</label>
+    <input
+      title="1"
+      type="number"
+      id="duration"
+      min="1"
+      max="1440"
+      class="nes-input"
+    />
+  </div>
+
+  <div class="nes-field margin-y-top-normal">
+    <label for="smallPause">Small Break</label>
+    <input
+      title="1"
+      type="number"
+      id="smallPause"
+      min="1"
+      max="1440"
+      class="nes-input"
+    />
+  </div>
+
+  <div class="nes-field margin-y-top-normal">
+    <label for="pause">Break</label>
+    <input
+      title="1"
+      type="number"
+      id="pause"
+      min="1"
+      max="1440"
+      class="nes-input"
+    />
+  </div>
+</div>
 
 {{end}}

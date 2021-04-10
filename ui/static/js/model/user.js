@@ -17,14 +17,6 @@ export class User {
     this.sessions.push(s);
   }
 
-  changeName(name) {
-    this.name = name;
-  }
-
-  changeSettings(settings) {
-    this.settings = settings;
-  }
-
   currentSession() {
     return this.sessions.filter((session) => session.isCurrent).pop();
   }

@@ -4,6 +4,7 @@
 @import 'footer.css';
 @import 'messages.css';
 @import 'overwrite_nes.css';
+@import 'settings.css';
 
 html, body {
     height: 100%;
@@ -15,10 +16,16 @@ body {
     margin: 0 2rem;
 }
 
+body.is-dark {
+    color: white;
+    background-color: #212529;
+}
+
 main {
     max-width: 1200px;
     margin: 0 auto;
     margin-top: 150px;
+    padding-bottom: 25px;
 }
 
 .margin-x-right-normal {

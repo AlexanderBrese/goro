@@ -4,7 +4,7 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/AlexanderBrese/gorro/pkg/model"
+	"github.com/AlexanderBrese/goro/pkg/model"
 )
 
 var (

@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/AlexanderBrese/gorro/pkg/model"
+	"github.com/AlexanderBrese/goro/pkg/model"
 )
 
 type TemplateFunctions struct {

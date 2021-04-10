@@ -28,7 +28,7 @@ export class WebElement {
   byId() {
     return document.getElementById(this.identifier);
   }
-
+  
   element(els) {
     switch (this.resolveOption) {
       case Options.RESOLVE_LATEST:

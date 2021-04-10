@@ -40,6 +40,8 @@ func NewRouting(h *RouteHandling, cfg *Configuration) *Routing {
 func (r *Routing) routes() http.Handler {
 	router := pat.New()
 
+	router.NotFound = http.HandlerFunc(r.handling.notFound)
+
 	router.Get(routes.home, http.HandlerFunc(r.handling.home))
 	router.Get(routes.settings, http.HandlerFunc(r.handling.settings))
 	router.Post(routes.statistics, http.HandlerFunc(r.handling.statistics))

@@ -12,6 +12,7 @@ var (
 		home:       "home.page.html",
 		statistics: "statistics.page.html",
 		settings:   "settings.page.html",
+		notFound:   "404.page.html",
 	}
 	/*
 		partialTemplates = &PartialTemplates{
@@ -24,6 +25,7 @@ type PageTemplates struct {
 	home       string
 	statistics string
 	settings   string
+	notFound   string
 }
 
 /*
@@ -54,6 +56,10 @@ func (h *RouteHandling) settings(w http.ResponseWriter, r *http.Request) {
 
 func (h *RouteHandling) statistics(w http.ResponseWriter, r *http.Request) {
 	h.handleWithUser(w, r, pageTemplates.statistics)
+}
+
+func (h *RouteHandling) notFound(w http.ResponseWriter, r *http.Request) {
+	h.handle(w, PageTemplateData(pageTemplates.notFound))
 }
 
 func (h *RouteHandling) ping(w http.ResponseWriter, r *http.Request) {

@@ -1,0 +1,16 @@
+#scroll-up {
+  position: fixed;
+  bottom: -60px;
+  right: 2rem;
+  box-shadow: 0 5px 20px rgb(0 0 0 / 60%);
+  transition: all 0.3s ease;
+}
+
+#scroll-up.active {
+  bottom: 25px;
+}
+
+#scroll-up > span {
+  display: block;
+  transform: rotateZ(90deg);
+}

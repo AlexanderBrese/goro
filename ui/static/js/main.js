@@ -5,6 +5,7 @@ import { Routing } from "./util/routing.js";
 import { UserStorage } from "./util/user_storage.js";
 import { Theme } from "./component/theme.js";
 import { Daemon } from "./daemon.js";
+import { ScrollUp } from "./component/scroll_up.js";
 
 class Main {
   constructor(userStorage = new UserStorage()) {
@@ -20,3 +21,4 @@ class Main {
 new Main().run();
 new LiveReload();
 //new Daemon().start();
+new ScrollUp();

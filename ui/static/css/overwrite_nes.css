@@ -6,6 +6,14 @@ a:hover {
     margin-bottom: 2rem;
 }
 
+.nes-container:last-of-type {
+    margin-bottom: 0;
+}
+
 .nes-container.is-dark {
     margin-bottom: 2rem;
+}
+
+.nes-container.is-dark:last-of-type {
+    margin-bottom: 0;
 }

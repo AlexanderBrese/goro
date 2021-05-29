@@ -1,8 +1,9 @@
 import { User, DefaultUser } from "../model/user.js";
-import { Settings } from "../model/settings.js";
+import { DefaultSettings, Settings } from "../model/settings.js";
 import { Break, Pomodoro, Session } from "../model/pomodoro.js";
 
-const StorageKey = new Date().toLocaleDateString();
+const UserStorageKey = new Date().toLocaleDateString();
+const SettingsStorageKey = "settings";
 
 export class UserStorage {
   newSession() {
@@ -12,6 +13,12 @@ export class UserStorage {
 
   newPomodoro() {
     this.user.currentSession().newPomodoro();
+    this.store();
+  }
+
+  newQuotedPomodoro(quote) {
+    this.user.currentSession().newPomodoro();
+    this.user.currentPomodoro().quote = quote;
     this.store();
   }
 
@@ -25,13 +32,34 @@ export class UserStorage {
     this.store();
   }
 
+  changeName(name) {
+    this.user.name = name;
+    this.store();
+  }
+
   store() {
-    localforage.setItem(StorageKey, this.serialize(this.user));
+    this.storeUser();
+    this.storeSettings();
+  }
+
+  importUser(key, user) {
+    this.storeUser(key, user)
+    this.user = user
+    this.storeSettings()
+  }
+
+  storeUser(key = UserStorageKey, user = this.user) {
+    localforage.setItem(key, this.serialize(user));
+  }
+
+  storeSettings() {
+    localforage.setItem(SettingsStorageKey, this.serialize(this.user.settings));
   }
 
   async loadTasks() {
     this.tasks = new Map();
-    await localforage.iterate((v) => {
+    await localforage.iterate((v, k) => {
+      if (k === SettingsStorageKey) return;
       JSON.parse(v).sessions.forEach((session) =>
         session.pomodoros.forEach((pom) => {
           if (pom.task !== "") {
@@ -46,24 +74,36 @@ export class UserStorage {
       );
     });
     // sort by value
-    this.tasks = new Map([...this.tasks.entries()].sort((a,b) => b[1] - a[1]));
+    this.tasks = new Map([...this.tasks.entries()].sort((a, b) => b[1] - a[1]));
   }
 
-  async loadUser() {
-    let u = await localforage.getItem(StorageKey);
+  async loadUser(settings) {
+    let u = await localforage.getItem(UserStorageKey);
     if (!u || u === "undefined") {
       this.user = DefaultUser();
       return this.user;
     }
 
     u = this.deserialize(u);
-    console.log(u)
-    this.user = new User(u.name, u.settings, u.sessions);
+    this.user = new User(u.name, settings, u.sessions);
+  }
+
+  async loadSettings() {
+    let s = await localforage.getItem(SettingsStorageKey);
+    if (!s) {
+      s = DefaultSettings();
+    } else {
+      s = JSON.parse(s);
+      s.__proto__ = Settings.prototype;
+    }
+
+    return s;
   }
 
   async load() {
-      await this.loadUser()
-      await this.loadTasks()
+    const settings = await this.loadSettings();
+    await this.loadUser(settings);
+    await this.loadTasks();
   }
 
   deserialize(user) {

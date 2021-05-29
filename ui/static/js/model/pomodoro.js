@@ -22,7 +22,7 @@ export class Session {
   }
 
   completedPomodoros() {
-    return this.pomodoros.filter((pom) => pom.completed())
+    return this.pomodoros.filter((pom) => pom.completed());
   }
 
   newPomodoro() {
@@ -53,13 +53,15 @@ export class Pomodoro {
     breaks = [],
     paused = true,
     startDate = new Date(),
-    feltProductive = false
+    feltProductive = false,
+    quote = "",
   ) {
     this.paused = paused;
     this.task = task;
     this.startDate = startDate;
     this.breaks = breaks;
     this.feltProductive = feltProductive;
+    this.quote = quote;
   }
 
   pause() {
@@ -88,7 +90,7 @@ export class Pomodoro {
   }
 
   toggleFeedBack() {
-    this.feltProductive = !this.feltProductive
+    this.feltProductive = !this.feltProductive;
   }
 
   newBreak() {
@@ -102,6 +104,7 @@ export class Pomodoro {
       completionDate: this.completionDate,
       breaks: this.breaks,
       feltProductive: this.feltProductive,
+      quote: this.quote,
     };
   }
 }

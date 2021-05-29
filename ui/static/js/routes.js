@@ -1,4 +1,5 @@
 export const Routes = {
     HOME: "/",
-    SETTINGS: "/settings"
+    SETTINGS: "/settings",
+    STATISTICS: "/statistics",
 };

@@ -6,13 +6,14 @@ import { Settings } from "./page/settings.js";
 export const RouteHandlers = {
   [Routes.HOME]: (userStorage) => homeHandler(userStorage),
   [Routes.SETTINGS]: (userStorage) => settingsHandler(userStorage),
+  [Routes.STATISTICS]: (userStorage) => statisticsHandler(userStorage),
 };
 
-function homeHandler(userStorage,) {
+async function homeHandler(userStorage) {
   const home = new Home(userStorage);
 
   if (userStorage.user.hasOngoingSession()) {
-    home.init();
+    await home.init();
   } else {
     home.start();
   }
@@ -20,4 +21,8 @@ function homeHandler(userStorage,) {
 
 function settingsHandler(userStorage) {
   new Settings(userStorage).start();
+}
+
+function statisticsHandler(userStorage) {
+  
 }

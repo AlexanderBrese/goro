@@ -13,8 +13,8 @@ type TemplateData struct {
 
 func NewTemplateData(name string, payload map[string]interface{}) *TemplateData {
 	today := time.Now()
-	payload["currentHour"] = uint8(today.Hour())
-	payload["currentYear"] = today.Year()
+	payload["CurrentHour"] = uint8(today.Hour())
+	payload["CurrentYear"] = today.Year()
 	return &TemplateData{
 		Name:    name,
 		Payload: payload,

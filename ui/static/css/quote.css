@@ -1,0 +1,8 @@
+.quote .quote--container {
+  flex-direction: row;
+  align-items: center;
+}
+
+.quote--head {
+  margin-right: 1rem;
+}

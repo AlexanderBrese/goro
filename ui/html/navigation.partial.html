@@ -2,8 +2,11 @@
 <nav>
   <h2><span href="/settings" id="settings">{{template "profile" .}}</span></h2>
   <h2>
-    <a class="nes-text is-primary" href="#statistics" id="statistics"
-      >Statistics</a
+    <a class="nes-text is-primary" href="/statistics" id="statistics"
+      ><div class="nes-badge is-icon">
+        <span class="is-error" id="notifications">1</span>
+        <span class="is-primary">Stats</span>
+      </div></a
     >
   </h2>
 </nav>

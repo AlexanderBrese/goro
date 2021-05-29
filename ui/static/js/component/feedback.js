@@ -1,4 +1,3 @@
-import { ButtonClickedSound } from "../util/sound.js";
 import { WebElement } from "../util/web_element.js";
 
 export class Feedback {
@@ -13,7 +12,7 @@ export class Feedback {
   }
 
   update() {
-    if(this.currentPomodoro.feltProductive) {
+    if (this.currentPomodoro.feltProductive) {
       this.productiveBtn.classList.remove("is-empty");
     }
   }
@@ -23,8 +22,8 @@ export class Feedback {
   }
 
   onClick() {
-    ButtonClickedSound.play()
     this.currentPomodoro.toggleFeedBack();
+    this.productiveBtn.classList.add("scaleInOut");
     if (this.productiveBtn.classList.contains("is-empty")) {
       this.productiveBtn.classList.remove("is-empty");
     } else {

@@ -8,7 +8,8 @@ export class Theme {
     this.checkboxes = document.getElementsByClassName("nes-checkbox");
     this.body = document.getElementsByTagName("body");
     this.header = document.getElementsByTagName("header");
-    this.level = document.getElementById("level")
+    this.level = document.getElementById("level--badge")
+    this.name = document.getElementById("name--badge")
   }
 
   apply() {
@@ -23,9 +24,13 @@ export class Theme {
     if(this.dark) {
         this.level.classList.add("is-primary")
         this.level.classList.remove("is-dark")
+        this.name.classList.add("is-warning")
+        this.name.classList.remove("is-dark")
     } else {
         this.level.classList.add("is-dark")
         this.level.classList.remove("is-primary")
+        this.name.classList.add("is-dark")
+        this.name.classList.remove("is-warning")
     }
   }
 

@@ -1,11 +1,46 @@
 a:hover {
-    text-decoration: none !important;
+  text-decoration: none !important;
 }
 
 .nes-container {
-    margin-bottom: 2rem;
+  margin-bottom: 2rem;
+}
+
+.nes-container:last-of-type {
+  margin-bottom: 0;
 }
 
 .nes-container.is-dark {
-    margin-bottom: 2rem;
+  margin-bottom: 2rem;
+}
+
+.nes-container.is-dark:last-of-type {
+  margin-bottom: 0;
+}
+
+.nes-balloon {
+  -webkit-animation: scaleIn 0.4s ease-in-out;
+  -moz-animation: scaleIn 0.4s ease-in-out;
+  animation: scaleIn 0.4s ease-in-out;
+}
+
+.nes-balloon.from-left {
+  -webkit-transform-origin: 0 center 0;
+  -moz-transform-origin: 0 center 0;
+  -ms-transform-origin: 0 center 0;
+  -o-transform-origin: 0 center 0;
+  transform-origin: 0 center 0;
+}
+
+.nes-balloon.from-right {
+  -webkit-transform-origin: right center 0;
+  -moz-transform-origin: right center 0;
+  -ms-transform-origin: right center 0;
+  -o-transform-origin: right center 0;
+  transform-origin: right center 0;
+}
+
+.nes-progress {
+  transition: 0.4s linear;  
+  transition-property: width, background-color;  
 }

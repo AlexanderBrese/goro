@@ -6,6 +6,9 @@
 @import 'overwrite_nes.css';
 @import 'settings.css';
 @import '404.css';
+@import 'scroll_up.css';
+@import 'quote.css';
+@import 'animation.css';
 
 html, body {
     height: 100%;
@@ -23,8 +26,12 @@ body.is-dark {
 main {
     max-width: 1200px;
     margin: 0 auto;
-    height: 100%;
     padding: 2rem 2rem;
+}
+
+#wrapper {
+    position: relative;
+    min-height: 100%;
 }
 
 .margin-x-right-normal {
@@ -33,6 +40,10 @@ main {
 
 .margin-y-top-normal {
     margin-top: 1rem;
+}
+
+.margin-y-top-large {
+    margin-top: 2rem;
 }
 
 .flash {

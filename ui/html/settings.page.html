@@ -1,6 +1,27 @@
 {{template "base" .}} {{define "title"}}Settings{{end}} {{define "body"}}
 
 <div class="nes-container with-title">
+  <p class="title">Profile</p>
+  <div class="nes-field margin-y-top-normal">
+    <label for="name">Name</label>
+    <input type="text" id="name" class="nes-input" />
+  </div>
+  <div class="margin-y-top-normal">
+    <label for="level">Level</label>
+    <div class="level--progress">
+      <span id="level--text"></span>
+      <progress
+        class="nes-progress is-success"
+        id="level"
+        value=""
+        max="100"
+      ></progress>
+      <span>100</span>
+    </div>
+  </div>
+</div>
+
+<div class="nes-container with-title">
   <p class="title">Settings</p>
   <div class="options">
     <label for="sound">Notification Sound</label>
@@ -10,7 +31,12 @@
         <span>Dark mode</span>
       </label>
       <label>
-        <input type="checkbox" id="notification" class="nes-checkbox" disabled />
+        <input
+          type="checkbox"
+          id="notification"
+          class="nes-checkbox"
+          disabled
+        />
         <span>Notifications</span>
       </label>
       <label>
@@ -23,8 +49,8 @@
   <div class="nes-select">
     <select required id="sound">
       <option value="" disabled selected hidden>Select...</option>
-      <option value="pristine-609.ogg">Default</option>
-      <option value="here-i-am-449.ogg">Vibrations</option>
+      <option value="pristine-609.ogg">Default (Pristine)</option>
+      <option value="here-i-am-449.ogg">Here I Am</option>
     </select>
   </div>
 
@@ -35,38 +61,30 @@
 
   <div class="nes-field margin-y-top-normal">
     <label for="duration">Pomodoro Duration</label>
-    <input
-      title="1"
-      type="number"
-      id="duration"
-      min="1"
-      max="1440"
-      class="nes-input"
-    />
+    <input type="number" id="duration" min="1" max="1440" class="nes-input" />
   </div>
 
   <div class="nes-field margin-y-top-normal">
     <label for="smallPause">Small Break</label>
-    <input
-      title="1"
-      type="number"
-      id="smallPause"
-      min="1"
-      max="1440"
-      class="nes-input"
-    />
+    <input type="number" id="smallPause" min="1" max="1440" class="nes-input" />
   </div>
 
   <div class="nes-field margin-y-top-normal">
     <label for="pause">Break</label>
-    <input
-      title="1"
-      type="number"
-      id="pause"
-      min="1"
-      max="1440"
-      class="nes-input"
-    />
+    <input type="number" id="pause" min="1" max="1440" class="nes-input" />
+  </div>
+</div>
+
+<div class="actions margin-y-top-normal">
+  <button
+    type="button"
+    class="nes-btn is-error margin-x-right-normal"
+    id="export"
+  >
+    Export
+  </button>
+  <div class="nes-btn is-success" style="position: relative">
+    Import<input id="import" type="file" />
   </div>
 </div>
 

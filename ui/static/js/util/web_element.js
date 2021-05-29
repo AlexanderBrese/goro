@@ -28,7 +28,7 @@ export class WebElement {
   byId() {
     return document.getElementById(this.identifier);
   }
-  
+
   element(els) {
     switch (this.resolveOption) {
       case Options.RESOLVE_LATEST:
@@ -78,3 +78,5 @@ export const NewCongratulations = new WebElement(
   ".congratulations",
   Options.RESOLVE_OLDEST
 );
+
+export const QuoteElement = new WebElement(".quote", Options.RESOLVE_OLDEST);

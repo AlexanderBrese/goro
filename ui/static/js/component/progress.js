@@ -1,5 +1,4 @@
 import { Counting } from "../util/counting.js";
-import { ButtonClickedSound } from "../util/sound.js";
 import { WebElement } from "../util/web_element.js";
 
 export class Progress {
@@ -8,6 +7,7 @@ export class Progress {
     duration,
     dispatch,
     pomodoroFinishedSound,
+    buttonClickedSound,
     timeText = new WebElement(".progress--time"),
     progressBar = new WebElement(".progress--bar"),
     resumeBtn = new WebElement(".progress--resume"),
@@ -16,6 +16,7 @@ export class Progress {
     this.duration = duration;
     this.currentPomodoro = currentPomodoro;
     this.pomodoroFinishedSound = pomodoroFinishedSound;
+    this.buttonClickedSound = buttonClickedSound;
     this.dispatch = dispatch;
     this.counting = new Counting(
       duration,
@@ -40,16 +41,13 @@ export class Progress {
   }
 
   onResume() {
-    ButtonClickedSound.play();
+    this.buttonClickedSound.play();
     if (this.currentPomodoro.paused) {
       this.currentPomodoro.resume();
       this.counting.resume();
       this.resumeBtn.textContent = "Pause";
       this.resumeBtn.classList.remove("is-error");
       this.resumeBtn.classList.add("is-warning");
-      if (this.progressBar.value === 0) {
-        this.progressBar.value = 0.1;
-      }
     } else {
       this.currentPomodoro.pause();
       this.counting.pause();
@@ -60,11 +58,12 @@ export class Progress {
   }
 
   onChange(elapsed) {
-    const elapsedMinutes = Math.floor(elapsed / 60);
+    const elapsedMinutes = elapsed / 60;
+
     if (elapsedMinutes > 0) {
-      this.updateText(elapsedMinutes);
-      this.updateProgressBar(elapsedMinutes);
+      this.updateText(Math.floor(elapsedMinutes));
     }
+    this.updateProgressBar(elapsedMinutes);
   }
 
   updateText(elapsedMinutes) {
@@ -106,7 +105,7 @@ export class Progress {
   }
 
   onFinish() {
-    ButtonClickedSound.play();
+    this.buttonClickedSound.play();
     this.counting.finish();
     this.updateProgressBar(this.duration);
   }

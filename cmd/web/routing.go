@@ -11,6 +11,7 @@ type Routes struct {
 	home       string
 	statistics string
 	settings   string
+	about      string
 
 	alive string
 	files string
@@ -20,6 +21,7 @@ var routes = &Routes{
 	home:       "/",
 	statistics: "/statistics",
 	settings:   "/settings",
+	about:      "/about",
 
 	alive: "/ping",
 	files: "/static/",
@@ -44,7 +46,9 @@ func (r *Routing) routes() http.Handler {
 
 	router.Get(routes.home, http.HandlerFunc(r.handling.home))
 	router.Get(routes.settings, http.HandlerFunc(r.handling.settings))
-	router.Post(routes.statistics, http.HandlerFunc(r.handling.statistics))
+	router.Get(routes.about, http.HandlerFunc(r.handling.about))
+	router.Get(routes.statistics, http.HandlerFunc(r.handling.statistics))
+	//router.Post(routes.statistics, http.HandlerFunc(r.handling.statistics))
 
 	router.Get(routes.alive, http.HandlerFunc(r.handling.ping))
 	router.Get(routes.files, fileServer(http.StripPrefix(routes.files, http.FileServer(http.Dir(r.config.StaticPath)))))
